@@ -12,19 +12,20 @@ function CoursesSection() {
         Learn from the Best
       </h2>
       <p className="text-sm md:text-base text-gray-500 mt-3 text-center">
-        Ready to stop dreaming and start doing? Your digital destiny awaits.<br />
+        Ready to stop dreaming and start doing? Your digital destiny awaits.
+        <br />
         Enroll in Presync Academy, and let's turn those wild ideas into
         jaw-dropping digital realities.{" "}
       </p>
 
       <div className="md:my-16 my-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-4 md:px-0 gap-4 mb-8">
-          {/* Map through the first 4 courses */}
           {allCourses.slice(0, 4).map((course, index) => (
             <CourseCard key={index} course={course} />
           ))}
         </div>
         <div className="flex justify-center mt-6">
+          {" "}
           <Link
             to={"/courses-list"}
             onClick={() => scrollTo(0, 0)}
