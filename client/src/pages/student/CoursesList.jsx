@@ -10,17 +10,23 @@ function CoursesList() {
   const { input } = useParams();
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState(input || "");
 
   // Filter courses based on search input and category
   useEffect(() => {
     let filtered = allCourses;
 
-    // Filter by search input
-    if (input) {
+    // Filter by search input (use searchQuery for real-time or input from URL)
+    const currentSearch = searchQuery || input;
+    if (currentSearch) {
       filtered = filtered.filter(
         (course) =>
-          course.courseTitle.toLowerCase().includes(input.toLowerCase()) ||
-          course.courseDescription.toLowerCase().includes(input.toLowerCase())
+          course.courseTitle
+            .toLowerCase()
+            .includes(currentSearch.toLowerCase()) ||
+          course.courseDescription
+            .toLowerCase()
+            .includes(currentSearch.toLowerCase())
       );
     }
 
@@ -34,7 +40,19 @@ function CoursesList() {
     }
 
     setFilteredCourses(filtered);
-  }, [allCourses, input, selectedCategory]);
+  }, [allCourses, input, selectedCategory, searchQuery]);
+
+  // Update searchQuery when URL parameter changes
+  useEffect(() => {
+    if (input) {
+      setSearchQuery(input);
+    }
+  }, [input]);
+
+  // Handle real-time search from SearchBar
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+  };
 
   const categories = [
     "All",
@@ -64,11 +82,13 @@ function CoursesList() {
                   Home
                 </span>{" "}
                 / <span>Courses List</span>
-              </p>
-
+              </p>{" "}
               {/* Search Bar */}
               <div className="max-w-2xl mx-auto">
-                <SearchBar data={input} />
+                <SearchBar
+                  data={searchQuery}
+                  onSearchChange={handleSearchChange}
+                />
               </div>
             </div>
 
@@ -93,12 +113,13 @@ function CoursesList() {
 
         {/* Courses Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* Results Info */}
+          {/* Results Info */}{" "}
           <div className="mb-8">
             <p className="text-gray-600">
-              {input && (
+              {(searchQuery || input) && (
                 <span>
-                  Showing results for "<strong>{input}</strong>" •
+                  Showing results for "<strong>{searchQuery || input}</strong>"
+                  •
                 </span>
               )}
               <span className="ml-1">
@@ -107,7 +128,6 @@ function CoursesList() {
               </span>
             </p>
           </div>
-
           {/* Courses Grid */}
           {filteredCourses.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -120,16 +140,19 @@ function CoursesList() {
               <div className="max-w-md mx-auto">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   No courses found
-                </h3>
+                </h3>{" "}
                 <p className="text-gray-500 mb-6">
-                  {input
-                    ? `We couldn't find any courses matching "${input}". Try adjusting your search terms.`
+                  {searchQuery || input
+                    ? `We couldn't find any courses matching "${
+                        searchQuery || input
+                      }". Try adjusting your search terms.`
                     : "No courses match the selected filters. Try selecting a different category."}
                 </p>
                 <button
                   onClick={() => {
                     setSelectedCategory("All");
-                    navigate("/course-list");
+                    setSearchQuery("");
+                    navigate("/courses-list");
                   }}
                   className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >

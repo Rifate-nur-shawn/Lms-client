@@ -1,7 +1,10 @@
 import React from "react";
 import { assets } from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
+
   return (
     <footer className="bg-gray-900 text-white w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -56,23 +59,23 @@ function Footer() {
           <div>
             <h3 className="text-white font-semibold text-lg mb-4">
               Quick Links
-            </h3>
+            </h3>{" "}
             <ul className="space-y-3">
               <li>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate("/")}
                   className="text-gray-300 hover:text-white transition-colors text-sm"
                 >
                   Home
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate("/courses-list")}
                   className="text-gray-300 hover:text-white transition-colors text-sm"
                 >
                   Courses
-                </a>
+                </button>
               </li>
               <li>
                 <a
