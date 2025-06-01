@@ -4,13 +4,14 @@ import { AppContext } from "../../context/AppContext";
 import { assets, dummyEducatorData } from "../../assets/assets";
 import Loading from "../../components/student/Loading";
 import Footer from "../../components/student/Footer";
-
+import Youtube from "react-youtube";
 function CourseDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState(null);
   const [selectedChapter, setSelectedChapter] = useState(0);
   const { allCourses, currency, calculateRating } = useContext(AppContext);
+  const [playerData, setPlayerData] = useState(null);
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
@@ -123,7 +124,7 @@ function CourseDetails() {
                     <span className="font-semibold text-blue-600">
                       {getEducatorName()}
                     </span>
-                  </p>
+                  </p>{" "}
                   <div className="flex items-center space-x-6 text-sm text-gray-600 mb-8">
                     <div className="flex items-center space-x-2">
                       <img
@@ -145,16 +146,37 @@ function CourseDetails() {
                     </div>
                   </div>
                 </div>
-              </div>
-
+              </div>{" "}
               {/* Right Column - Course Card */}
               <div className="lg:col-span-1">
                 <div className="bg-white rounded-lg shadow-lg p-6 sticky top-6">
-                  <img
-                    src={courseData.courseThumbnail}
-                    alt={courseData.courseTitle}
-                    className="w-full rounded-lg mb-4"
-                  />
+                  {playerData ? (
+                    <div className="mb-4">
+                      <Youtube
+                        videoId={playerData.videoId}
+                        opts={{
+                          width: "100%",
+                          height: "200",
+                          playerVars: {
+                            autoplay: 1,
+                          },
+                        }}
+                        iframeClassName="w-full rounded-lg"
+                      />
+                      <button
+                        onClick={() => setPlayerData(null)}
+                        className="mt-2 text-sm text-blue-600 hover:underline"
+                      >
+                        ← Back to course info
+                      </button>
+                    </div>
+                  ) : (
+                    <img
+                      src={courseData.courseThumbnail}
+                      alt={courseData.courseTitle}
+                      className="w-full rounded-lg mb-4"
+                    />
+                  )}
 
                   <div className="mb-4">
                     <div className="flex items-center space-x-2 mb-2">
@@ -288,9 +310,18 @@ function CourseDetails() {
                                   <div>
                                     <p className="font-medium text-gray-900">
                                       {lecture.lectureTitle}
-                                    </p>
+                                    </p>{" "}
                                     {lecture.isPreviewFree && (
-                                      <span className="text-xs text-blue-600 font-medium">
+                                      <span
+                                        onClick={() =>
+                                          setPlayerData({
+                                            videoId: lecture.lectureUrl
+                                              .split("/")
+                                              .pop(),
+                                          })
+                                        }
+                                        className="text-xs text-blue-600 font-medium cursor-pointer hover:underline"
+                                      >
                                         Preview
                                       </span>
                                     )}
