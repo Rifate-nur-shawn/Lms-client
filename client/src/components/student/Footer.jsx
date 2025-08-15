@@ -15,7 +15,7 @@ function Footer() {
   };
 
   return (
-    <footer className="relative w-full text-white bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
+    <footer className="relative w-full mt-8 text-white bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
       {/* subtle top glow */}
       <div
         className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
