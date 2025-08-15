@@ -1,9 +1,11 @@
 import React from "react";
 import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
+import { Line } from "rc-progress";
+import Footer from "../../components/student/Footer";
 
 function MyEnrollments() {
-  const { enrolledCourses, courseDuration } = useContext(AppContext);
+  const { enrolledCourses, courseDuration ,navigate} = useContext(AppContext);
   const [progressArray, _setProgressArray] = React.useState([
     {
       lactureCompleted: 4,
@@ -54,6 +56,7 @@ function MyEnrollments() {
                   />
                   <div className="flex-1">
                     <p className="mb-1 max-sm:text-sm">{course.courseTitle}</p>
+                    <Line strokeWidth={2} percent={progressArray[index]?(progressArray[index].lactureCompleted*100)/progressArray[index].totalLectures:0} className="bg-gray-300 rounded-full"/>
                   </div>
                 </td>
                 <td className="px-4 py-3 max-sm:hidden">
@@ -66,8 +69,10 @@ function MyEnrollments() {
                   <span>Lectures</span>
                 </td>
                 <td className="px-4 py-3 max-sm:text-right ">
-                  <button className="px-3 sm:px-5 py-1.5 sm:py-2 bg-blue-600 max-sm:text-xs text-white">
-                    On Going
+                  <button className="px-3 sm:px-5 py-1.5 sm:py-2 bg-blue-600 max-sm:text-xs text-white" onClick={()=>navigate('/player/'  + course._id) } >{
+                    progressArray[index]&& progressArray[index].lactureCompleted === progressArray[index].totalLectures===1? 'completed' : 'On Going'
+                  }
+                   
                   </button>
                 </td>
               </tr>
@@ -75,6 +80,7 @@ function MyEnrollments() {
           </tbody>
         </table>
       </div>
+      <Footer/>
     </>
   );
 }
